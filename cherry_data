@@ -32,7 +32,11 @@ class dati(object):
             ora[time]=med
             med=[]
         return ora
-    
+##algoritmo: serie di soglie (bottone,pericolosità...) se sopra o sotto so quale allarme
+#attivare. In più valuto ritardo medio sulla fascia oraria (se mi scordo spesso in quell'ora 
+#notifica sempre più impellente). Per ogni fascia oraria mi calcolo uno score per ogni medicinale
+#prendo max perchè più urgente. Da lì ho look up table switch case che mi dice quale allarme usare
+        
         
 
 if __name__=="__main__":
