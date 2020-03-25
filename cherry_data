@@ -1,0 +1,44 @@
+# #prototipi
+
+farmaci={
+   'vivinC':{
+   'pericolisità': 4,
+   'principio attivo': 'Boh',
+   'dose': 100,
+   'interazione': None
+   }
+ }
+
+piano=[{'orario':20, 'medicina':'vivinC'}, {'orario':17, 'medicina':'aspirina'},{'orario':17, 'medicina':'tachipirina'}]
+
+# #funzioni che prende in input il piano e lo ordina per orario
+class dati(object):
+    
+    def init(self):
+        pass
+
+    def riordina(self, piano):
+        ora=[]
+        med=[]
+        #prendiamo il valore della chiave orario e facciamo il sort classico
+        piano_ordinato=sorted(piano, key=lambda i: i['orario'])
+        for orari in piano_ordinato:
+            ora.append(orari['orario'])
+        ora = dict.fromkeys(ora) 
+        for time in ora.keys():
+            for time2 in piano_ordinato:
+                if time==time2['orario']:
+                    med.append(time2['medicina'])
+            ora[time]=med
+            med=[]
+        return ora
+    
+        
+
+if __name__=="__main__":
+    d=dati()
+    d.riordina(piano)
+    
+     
+     
+     
