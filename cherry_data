@@ -2,15 +2,27 @@
 
 farmaci={
    'vivinC':{
-   'pericolisità': 4,
+   'pericolosità': 1,
+   'principio attivo': 'Boh',
+   'dose': 100,
+   'interazione': None
+   },
+   'aspirina':{
+   'pericolosità': 3,
+   'principio attivo': 'Boh',
+   'dose': 100,
+   'interazione': None
+   },
+   'tachipirina':{
+   'pericolosità': 6,
    'principio attivo': 'Boh',
    'dose': 100,
    'interazione': None
    }
  }
 
-piano=[{'orario':20, 'medicina':'vivinC'}, {'orario':17, 'medicina':'aspirina'},{'orario':17, 'medicina':'tachipirina'}]
-
+piano=[{'orario':'20', 'medicina':'vivinC'}, {'orario':'17', 'medicina':'aspirina'},{'orario':'17', 'medicina':'tachipirina'}]
+ritardi={'17':12,'20':15}
 # #funzioni che prende in input il piano e lo ordina per orario
 class dati(object):
     
@@ -31,18 +43,38 @@ class dati(object):
                     med.append(time2['medicina'])
             ora[time]=med
             med=[]
+        
         return ora
+    
 ##algoritmo: serie di soglie (bottone,pericolosità...) se sopra o sotto so quale allarme
 #attivare. In più valuto ritardo medio sulla fascia oraria (se mi scordo spesso in quell'ora 
 #notifica sempre più impellente). Per ogni fascia oraria mi calcolo uno score per ogni medicinale
 #prendo max perchè più urgente. Da lì ho look up table switch case che mi dice quale allarme usare
-        
-        
+              
+    def algoritmo(self,piano,farmaci, ritardi):
+        w1=1 #peso ritardo
+        w2=5 #peso pericolosità
+        #ricorda di inizializzare i pesi w prima apriori
+        massimo = w1*60 + w2*10
+        minimo = w2
+        scor1_diz={} #primo score con ora:score legato ai ritardi e pericolosità
+        for orario in piano.keys():
+            ritardo=ritardi[orario]
+            farmaci_selected=piano[orario]
+            scoretmp1=[]
+            for farmaco in farmaci_selected:
+                pericolosita=farmaci[farmaco]['pericolosità']
+                tmp=w1*ritardo + w2*pericolosita
+                scoretmp1.append(tmp)
+            score1=max(scoretmp1)
+            score1=round((score1-minimo)*10/(massimo-minimo))
+            scor1_diz.update({orario: score1})
+            
+        return scor1_diz
+
+
 
 if __name__=="__main__":
     d=dati()
-    d.riordina(piano)
-    
-     
-     
-     
+    ora=d.riordina(piano)
+    score=d.algoritmo(ora,farmaci,ritardi)
